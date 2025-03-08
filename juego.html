@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Robot Fighting Game</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.6.0/p5.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.2.3/howler.min.js"></script>
+    <style>
+        body { text-align: center; background-color: black; color: white; font-family: Arial, sans-serif; }
+        canvas { display: block; margin: auto; }
+    </style>
+</head>
+<body>
+    <h1>¡Pelea de Robots!</h1>
+    <script>
+        let robot1, robot2;
+        let vida1 = 100, vida2 = 100;
+        
+        function setup() {
+            createCanvas(800, 400);
+            robot1 = new Robot(150, height - 100, 'blue');
+            robot2 = new Robot(650, height - 100, 'red');
+        }
+        
+        function draw() {
+            background(30);
+            drawHealthBars();
+            robot1.show();
+            robot2.show();
+        }
+        
+        function keyPressed() {
+            if (keyCode === LEFT_ARROW) robot2.move(-20);
+            if (keyCode === RIGHT_ARROW) robot2.move(20);
+            if (keyCode === 65) robot1.move(-20); // A
+            if (keyCode === 68) robot1.move(20); // D
+            if (keyCode === 87) attack(robot1, robot2); // W
+            if (keyCode === UP_ARROW) attack(robot2, robot1);
+        }
+        
+        function attack(attacker, defender) {
+            if (dist(attacker.x, attacker.y, defender.x, defender.y) < 50) {
+                if (attacker === robot1) vida2 -= 10;
+                else vida1 -= 10;
+            }
+        }
+        
+        function drawHealthBars() {
+            fill("green");
+            rect(50, 20, vida1 * 2, 20);
+            rect(550, 20, vida2 * 2, 20);
+        }
+        
+        class Robot {
+            constructor(x, y, color) {
+                this.x = x;
+                this.y = y;
+                this.color = color;
+            }
+            move(step) {
+                this.x += step;
+            }
+            show() {
+                fill(this.color);
+                rect(this.x, this.y, 50, 50);
+            }
+        }
+    </script>
+</body>
+</html>
